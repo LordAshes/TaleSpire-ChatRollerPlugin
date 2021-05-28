@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Text;
 using TMPro;
 
-namespace CustomMiniPlugin
+namespace LordAshes
 {
     class ChatHandler
     {
@@ -25,6 +25,9 @@ namespace CustomMiniPlugin
 
         // Randomizer
         private System.Random rnd = new System.Random();
+
+        // Edition
+        private string edition;
 
         /// <summary>
         /// Constructor taking in the content directory and identifiers
@@ -109,7 +112,7 @@ namespace CustomMiniPlugin
                     }
                 }
 
-                activeObject.Creature.Speak("<align=\"center\"><size=24>" + request + "</size></align>\r\n<align=\"center\"><size=20>" + expanded + "</size></align>\r\n<align=\"center\"><size=32>" + v.ToString().Replace("~", "=") + "</size></align>");
+                activeObject.Creature.Speak("<align=\"center\"><size=24>" + WordCase(request) + "</size></align>\r\n<align=\"center\"><size=20>" + expanded + "</size></align>\r\n<align=\"center\"><size=32>" + v.ToString().Replace("~", "=") + "</size></align>");
             }
             catch (System.Exception)
             {
@@ -118,11 +121,29 @@ namespace CustomMiniPlugin
 
         }
 
+        /// <summary>
+        /// Allows setting an edition. This can be used by plugins that depend on this plugin.
+        /// </summary>
+        /// <param name="setting"></param>
+        public void SetEdition(string setting)
+        {
+            if (setting != "") { edition = setting + "."; } else { edition = ""; }
+        }
+
+        /// <summary>
+        /// Method to get the edition
+        /// </summary>
+        /// <returns></returns>
+        public string GetEdition()
+        {
+            return edition;
+        }
+
         private string ReplacePlaceHolders(string request)
         {
             if (activeObject == null) { return request; }
 
-            string charSheet = dir + activeObject.Creature.Name + ".chs";
+            string charSheet = dir +"Misc/"+ edition + activeObject.Creature.Name + ".chs";
             if (!System.IO.File.Exists(charSheet)) { return request; }
 
             string[] replacements = System.IO.File.ReadAllLines(charSheet);
@@ -192,6 +213,25 @@ namespace CustomMiniPlugin
                 }
             }
             return request;
+        }
+
+        private string WordCase(string txt)
+        {
+            string result = txt.Substring(0,1).ToUpper();
+            for(int p=1; p<txt.Length; p++)
+            {
+                if("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".Contains(txt.Substring(p-1,1)))
+                {
+                    // Previous character was a letter
+                    result = result + txt.Substring(p, 1).ToLower();
+                }
+                else
+                {
+                    // Previous character was not a letter
+                    result = result + txt.Substring(p, 1).ToUpper();
+                }
+            }
+            return result;
         }
     }
 }
