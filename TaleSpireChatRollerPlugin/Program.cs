@@ -1,15 +1,19 @@
 ﻿using BepInEx;
 
-namespace CustomMiniPlugin
+namespace LordAshes
 {
-    [BepInPlugin("org.d20armyknife.plugins.CustomMini", "Chat Roller Plug-In", "1.2.0.0")]
-    public class CustomMiniPlugin : BaseUnityPlugin
+    [BepInPlugin(Guid, "Chat Roller Plug-In", Version)]
+    public class ChatRollerPlugin : BaseUnityPlugin
     {
+        // Plugin info
+        public const string Guid = "org.lordashes.plugins.chatroller";
+        public const string Version = "1.2.3.0";
+
         // Content directory
         private static string dir = UnityEngine.Application.dataPath.Substring(0, UnityEngine.Application.dataPath.LastIndexOf("/")) + "/TaleSpire_CustomData/";
 
         // Chat handelr
-        ChatHandler chatHandler = new ChatHandler(dir);
+        private static ChatHandler chatHandler = new ChatHandler(dir);
 
         /// <summary>
         /// Function for initializing plugin
@@ -17,8 +21,8 @@ namespace CustomMiniPlugin
         /// </summary>
         void Awake()
         {
-            UnityEngine.Debug.Log("Chat Roller Plugin Active. Expecting character sheets in '"+dir+"',");
-            UnityEngine.Debug.Log("with file name matching the character name and an .CHS extension.");
+            UnityEngine.Debug.Log("Chat Roller Plugin Active. Expecting character sheets in '"+dir+"/Misc',");
+            UnityEngine.Debug.Log("with file name matching the edition dot character name and an .CHS extension.");
         }
 
         /// <summary>
@@ -45,6 +49,16 @@ namespace CustomMiniPlugin
                     }
                 }
             }
+        }
+
+        public static string GetEdition()
+        {
+            return chatHandler.GetEdition();
+        }
+
+        public static void SetEdition(string setting)
+        {
+            chatHandler.SetEdition(setting);
         }
     }
 }

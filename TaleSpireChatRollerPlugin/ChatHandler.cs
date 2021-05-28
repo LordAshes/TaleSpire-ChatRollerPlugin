@@ -141,10 +141,11 @@ namespace LordAshes
 
         private string ReplacePlaceHolders(string request)
         {
-            if (activeObject == null) { return request; }
+            if (activeObject == null) { UnityEngine.Debug.LogWarning("No Mini Selected. Placeholder Replacement Cannot Be Performed.");  return request; }
 
+            UnityEngine.Debug.Log("Using '" + dir + "Misc/" + edition + activeObject.Creature.Name + ".chs' for lookup data.");
             string charSheet = dir +"Misc/"+ edition + activeObject.Creature.Name + ".chs";
-            if (!System.IO.File.Exists(charSheet)) { return request; }
+            if (!System.IO.File.Exists(charSheet)) { UnityEngine.Debug.LogWarning("Missing Character Sheet '"+ charSheet + "'."); return request; }
 
             string[] replacements = System.IO.File.ReadAllLines(charSheet);
 
@@ -156,8 +157,11 @@ namespace LordAshes
                     foreach (string rep in replacements)
                     {
                         string[] parts = rep.Split('=');
-                        // UnityEngine.Debug.Log("Pass " + (l + 1) + ": Replacing '" + parts[0] + "' with '" + parts[1] + "' on '"+segments[s]+"'");
-                        segments[s] = segments[s].Replace(parts[0], parts[1]);
+                        if (parts.Length == 2)
+                        {
+                            // UnityEngine.Debug.Log("Pass " + (l + 1) + ": Replacing '" + parts[0] + "' with '" + parts[1] + "' on '"+segments[s]+"'");
+                            segments[s] = segments[s].Replace(parts[0], parts[1]);
+                        }
                     }
                 }
                 request = segments[0];
@@ -165,10 +169,8 @@ namespace LordAshes
                 {
                     request = request + "'" + segments[s];
                 }
-                // UnityEngine.Debug.Log("Modified Request Is Now: "+request);
+                UnityEngine.Debug.Log("Modified Request Is Now: "+request);
             }
-
-            // UnityEngine.Debug.Log("Decoded Request Is Now: " + request);
 
             return request;
         }
@@ -212,15 +214,32 @@ namespace LordAshes
                     }
                 }
             }
+
+            UnityEngine.Debug.Log("Modified Request Is Now: " + request);
+
             return request;
         }
 
         private string WordCase(string txt)
         {
-            string result = txt.Substring(0,1).ToUpper();
-            for(int p=1; p<txt.Length; p++)
+            string result = "";
+            int p = 0;
+            for (; p < txt.Length; p++)
             {
-                if("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".Contains(txt.Substring(p-1,1)))
+                if(!("{_}".Contains(txt.Substring(p, 1))))
+                {
+                    result = txt.Substring(p, 1).ToUpper();
+                    p++;
+                    break;
+                }
+            }
+            for (; p<txt.Length; p++)
+            {
+                if("{_}".Contains(txt.Substring(p, 1)))
+                {
+                    result = result + " ";
+                }
+                else if("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".Contains(txt.Substring(p-1,1)))
                 {
                     // Previous character was a letter
                     result = result + txt.Substring(p, 1).ToLower();
