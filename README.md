@@ -21,20 +21,28 @@ side of the equal sign) before evaluating the roll. Text can be added using sing
 not be done with text. When adding text numeric values after text, surround the values in brackets. For example:
 Stealth='Stealth:'+(1D20+PB+StealthBonus)  
 
-## How to Compile / Modify
+## Limitations
 
-Open ```CharRollerPlaugin.sln``` in Visual Studio.
+The character sheet lookup replacement are applied in the order that they are listed in the key/value pair
+character sheet. This means attention has to be paid to the order of the replacement if some replacements
+contain other replacements. For example:
 
-You will need to add references to:
+````CHS
+wis=18
+wis mod=4
+wis save=1D20+wis mod
+````
+Will not work correctly because "wis save" will replace "wis" with "18" to become "18 save". Thus we need to
+re-order the items in ordert to make them work. Such as:
+````CHS
+wis save=1D20+wis mod
+wis mod=4
+wis=18
+````
+Now "wis" will get replaced with "18" only if it was not part of "wis save" or "wis mod".
 
-```
-* BepInEx.dll  (Download from the BepInEx project.)
-* Bouncyrock.TaleSpire.Runtime (found in Steam\steamapps\common\TaleSpire\TaleSpire_Data\Managed)
-* UnityEngine.dll
-* UnityEngine.CoreModule.dll
-* UnityEngine.InputLegacyModule.dll 
-```
 
-Build the project.
 
-Browse to the newly created ```bin/Debug``` or ```bin/Release``` folders and copy the ```CharacterViewPlugin.dll``` to ```Steam\steamapps\common\TaleSpire\BepInEx\plugins```
+
+
+
