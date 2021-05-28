@@ -3,20 +3,17 @@
 namespace LordAshes
 {
     [BepInPlugin(Guid, "Chat Roller Plug-In", Version)]
-    public class CharacterSheetsPlugin : BaseUnityPlugin
+    public class ChatRollerPlugin : BaseUnityPlugin
     {
         // Plugin info
         public const string Guid = "org.lordashes.plugins.chatroller";
-        public const string Version = "1.2.1.0";
-
-        // Edition
-        private string edition { get; set; }
+        public const string Version = "1.2.2.0";
 
         // Content directory
         private static string dir = UnityEngine.Application.dataPath.Substring(0, UnityEngine.Application.dataPath.LastIndexOf("/")) + "/TaleSpire_CustomData/";
 
         // Chat handelr
-        ChatHandler chatHandler = new ChatHandler(dir);
+        private static ChatHandler chatHandler = new ChatHandler(dir);
 
         /// <summary>
         /// Function for initializing plugin
@@ -52,6 +49,16 @@ namespace LordAshes
                     }
                 }
             }
+        }
+
+        public static string GetEdition()
+        {
+            return chatHandler.GetEdition();
+        }
+
+        public static void SetEdition(string setting)
+        {
+            chatHandler.SetEdition(setting);
         }
     }
 }
