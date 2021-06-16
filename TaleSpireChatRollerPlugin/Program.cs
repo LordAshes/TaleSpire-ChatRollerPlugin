@@ -7,7 +7,7 @@ namespace LordAshes
     {
         // Plugin info
         public const string Guid = "org.lordashes.plugins.chatroller";
-        public const string Version = "1.2.3.0";
+        public const string Version = "1.3.0.0";
 
         // Content directory
         private static string dir = UnityEngine.Application.dataPath.Substring(0, UnityEngine.Application.dataPath.LastIndexOf("/")) + "/TaleSpire_CustomData/";
@@ -16,17 +16,18 @@ namespace LordAshes
         private static ChatHandler chatHandler = new ChatHandler(dir);
 
         /// <summary>
-        /// Function for initializing plugin
         /// This function is called once by TaleSpire
         /// </summary>
         void Awake()
         {
             UnityEngine.Debug.Log("Chat Roller Plugin Active. Expecting character sheets in '"+dir+"/Misc',");
             UnityEngine.Debug.Log("with file name matching the edition dot character name and an .CHS extension.");
+
+            // Post plugin on the TaleSpire main page
+            StateDetection.Initialize(this.GetType());
         }
 
         /// <summary>
-        /// Function for determining if view mode has been toggled and, if so, activating or deactivating Character View mode.
         /// This function is called periodically by TaleSpire.
         /// </summary>
         void Update()
@@ -59,6 +60,13 @@ namespace LordAshes
         public static void SetEdition(string setting)
         {
             chatHandler.SetEdition(setting);
+        }
+
+        public static string GetCreatureName(CreatureBoardAsset asset)
+        {
+            string name = asset.Creature.Name;
+            if (name.Contains("<size=0>")) { name = name.Substring(0, name.IndexOf("<size=0>")).Trim(); }
+            return name;
         }
     }
 }

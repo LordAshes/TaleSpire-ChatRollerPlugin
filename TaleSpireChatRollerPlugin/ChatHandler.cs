@@ -143,8 +143,8 @@ namespace LordAshes
         {
             if (activeObject == null) { UnityEngine.Debug.LogWarning("No Mini Selected. Placeholder Replacement Cannot Be Performed.");  return request; }
 
-            UnityEngine.Debug.Log("Using '" + dir + "Misc/" + edition + activeObject.Creature.Name + ".chs' for lookup data.");
-            string charSheet = dir +"Misc/"+ edition + activeObject.Creature.Name + ".chs";
+            UnityEngine.Debug.Log("Using '" + dir + "Misc/" + edition + ChatRollerPlugin.GetCreatureName(activeObject) + ".chs' for lookup data.");
+            string charSheet = dir +"Misc/"+ edition + ChatRollerPlugin.GetCreatureName(activeObject) + ".chs";
             if (!System.IO.File.Exists(charSheet)) { UnityEngine.Debug.LogWarning("Missing Character Sheet '"+ charSheet + "'."); return request; }
 
             string[] replacements = System.IO.File.ReadAllLines(charSheet);
@@ -159,7 +159,6 @@ namespace LordAshes
                         string[] parts = rep.Split('=');
                         if (parts.Length == 2)
                         {
-                            // UnityEngine.Debug.Log("Pass " + (l + 1) + ": Replacing '" + parts[0] + "' with '" + parts[1] + "' on '"+segments[s]+"'");
                             segments[s] = segments[s].Replace(parts[0], parts[1]);
                         }
                     }
