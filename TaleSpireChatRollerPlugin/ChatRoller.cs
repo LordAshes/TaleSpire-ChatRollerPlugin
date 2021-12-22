@@ -12,7 +12,7 @@ namespace LordAshes
     {
         // Plugin info
         public const string Guid = "org.lordashes.plugins.chatroller";
-        public const string Version = "1.4.1.0";
+        public const string Version = "1.4.3.0";
 
         // Content directory
         public static string dir = UnityEngine.Application.dataPath.Substring(0, UnityEngine.Application.dataPath.LastIndexOf("/")) + "/TaleSpire_CustomData/";
@@ -28,6 +28,10 @@ namespace LordAshes
         /// </summary>
         void Awake()
         {
+            UnityEngine.Debug.LogWarning("*************************************************************");
+            UnityEngine.Debug.LogWarning("Chat Roller Plugin is Obsolete. Use Chat Roll Plugin instead.");
+            UnityEngine.Debug.LogWarning("*************************************************************");
+
             UnityEngine.Debug.Log("Chat Roller Plugin Active. Expecting character sheets in '" + dir + "/Misc',");
             UnityEngine.Debug.Log("with file name matching the edition dot character name and an .CHS extension.");
 
@@ -46,7 +50,7 @@ namespace LordAshes
                 tex.LoadImage(System.IO.File.ReadAllBytes(dir + "Images/Icons/Dice.Png"));
                 Sprite icon = Sprite.Create(tex, new Rect(0, 0, 32, 32), new Vector2(0.5f, 0.5f));
 
-                RadialUI.RadialUIPlugin.AddOnCharacter(Guid, new MapMenu.ItemArgs
+                RadialUI.RadialUIPlugin.AddCustomButtonOnCharacter(Guid, new MapMenu.ItemArgs
                 {
                     Action = (mmi, obj) =>
                     {

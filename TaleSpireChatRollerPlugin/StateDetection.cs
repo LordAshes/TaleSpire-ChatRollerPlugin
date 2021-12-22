@@ -32,7 +32,7 @@ namespace LordAshes
                             {
                                 modListText.text += "\n\nMods Currently Installed:\n";
                             }
-                            modListText.text += "\nLord Ashes' " + bepInPlugin.Name + " - " + bepInPlugin.Version;
+                            modListText.text += "\n<color=red>(Obsolete)</color> Lord Ashes' " + bepInPlugin.Name + " - " + bepInPlugin.Version;
                         }
                     }
                 }
